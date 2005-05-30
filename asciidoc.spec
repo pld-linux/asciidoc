@@ -1,4 +1,3 @@
-#
 Summary:	A tool for converting text files to various formats
 Summary(pl):	Narzêdzie do konwersji plików tekstowych do ró¿nych formatów
 Name:		asciidoc
@@ -16,20 +15,22 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_sysconfdir	/etc/asciidoc
 
 %description
-AsciiDoc is a text document format for writing short documents, articles,
-books and UNIX man pages. AsciiDoc files can be translated to HTML (with
-or without stylesheets), DocBook and LinuxDoc markup using the asciidoc(1)
-command. AsciiDoc is highly configurable: both the AsciiDoc source file
-syntax and the backend output markups (which can be almost any type
-of SGML/XML markup) can be customized and extended by the user.
+AsciiDoc is a text document format for writing short documents,
+articles, books and UNIX man pages. AsciiDoc files can be translated
+to HTML (with or without stylesheets), DocBook and LinuxDoc markup
+using the asciidoc(1) command. AsciiDoc is highly configurable: both
+the AsciiDoc source file syntax and the backend output markups (which
+can be almost any type of SGML/XML markup) can be customized and
+extended by the user.
 
 %description -l pl
-AsciiDoc jest formatem dokumentów tekstowych do pisania krótkich dokumentów,
-artyku³ów, ksi±¿ek i podrêczników systemu UNIX. Pliki AsciiDoc mog± byæ
-t³umaczone do HTML-u (z lub bez CSS), DocBook-a i LinuxDoc-a u¿ywaj±c
-polecenia asciidoc(1). AsciiDoc jest wysoce konfigurowalny: zarówno sk³adnia
-plików ¼ród³owych, jak i znaczniki backendów (które mog± byæ dowolnego typu
-SGML/XML) mog± byæ dostosowywane i rozszerzane przez u¿ytkownika.
+AsciiDoc jest formatem dokumentów tekstowych do pisania krótkich
+dokumentów, artyku³ów, ksi±¿ek i podrêczników systemu UNIX. Pliki
+AsciiDoc mog± byæ t³umaczone do HTML-a (z lub bez CSS), DocBooka i
+LinuxDoca u¿ywaj±c polecenia asciidoc(1). AsciiDoc jest wysoce
+konfigurowalny: zarówno sk³adnia plików ¼ród³owych, jak i znaczniki
+backendów (które mog± byæ dowolnego typu SGML/XML) mog± byæ
+dostosowywane i rozszerzane przez u¿ytkownika.
 
 %prep
 %setup -q
@@ -52,9 +53,10 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc BUGS README
+%attr(755,root,root) %{_bindir}/%{name}
 %dir %{_sysconfdir}
-%config %{_sysconfdir}/*
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/*
+# FIXME: DUP
 %{_datadir}/%{name}
 %attr(755,root,root) %{_datadir}/%{name}/asciidoc.py
-%{_bindir}/%{name}
 %{_mandir}/man1/*
