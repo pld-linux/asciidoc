@@ -56,7 +56,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/%{name}
 %dir %{_sysconfdir}
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/*
-# FIXME: DUP
-%{_datadir}/%{name}
+%dir %{_datadir}/%{name}
 %attr(755,root,root) %{_datadir}/%{name}/asciidoc.py
+%{_datadir}/%{name}/filters
+%{_datadir}/%{name}/images
+%{_datadir}/%{name}/stylesheets
 %{_mandir}/man1/*
