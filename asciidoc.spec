@@ -1,14 +1,15 @@
 Summary:	A tool for converting text files to various formats
 Summary(pl):	Narzêdzie do konwersji plików tekstowych do ró¿nych formatów
 Name:		asciidoc
-Version:	6.0.3
+Version:	7.0.0
 Release:	1
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://www.methods.co.nz/asciidoc/%{name}-%{version}.tar.gz
-# Source0-md5:	7b8d918f68a24c1d13be6999248788f8
+# Source0-md5:	fdce1bb38f9ec8b333ced4f22f5e95a0
 URL:		http://www.methods.co.nz/asciidoc/index.html
 Requires:	python >= 2.3
+Requires:	python-modules >= 2.3
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
