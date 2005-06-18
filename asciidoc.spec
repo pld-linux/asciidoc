@@ -9,7 +9,7 @@ Source0:	http://www.methods.co.nz/asciidoc/%{name}-%{version}.tar.gz
 # Source0-md5:	fdce1bb38f9ec8b333ced4f22f5e95a0
 URL:		http://www.methods.co.nz/asciidoc/index.html
 Requires:	python >= 2.3
-Requires:	python-modules >= 2.3
+%pyrequires_eq	python-modules
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
