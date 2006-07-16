@@ -2,14 +2,16 @@ Summary:	A tool for converting text files to various formats
 Summary(pl):	Narzêdzie do konwersji plików tekstowych do ró¿nych formatów
 Name:		asciidoc
 Version:	7.0.0
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Applications/System
 Source0:	http://www.methods.co.nz/asciidoc/%{name}-%{version}.tar.gz
 # Source0-md5:	fdce1bb38f9ec8b333ced4f22f5e95a0
 URL:		http://www.methods.co.nz/asciidoc/index.html
+Requires:	libxslt-progs
 Requires:	python >= 2.3
 Requires:	python-modules >= 2.3
+Requires:	xmlto
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -45,8 +47,10 @@ install *.conf $RPM_BUILD_ROOT%{_sysconfdir}
 install asciidoc.py $RPM_BUILD_ROOT%{_datadir}/%{name}
 find filters -type f -exec install {} $RPM_BUILD_ROOT%{_datadir}/%{name}/{} \;;
 find images -type f -exec install {} $RPM_BUILD_ROOT%{_datadir}/%{name}/{} \;;
+find stylesheets -type f -exec install {} $RPM_BUILD_ROOT%{_datadir}/%{name}/{} \;;
 install doc/asciidoc.1 $RPM_BUILD_ROOT%{_mandir}/man1
 ln -sf %{_datadir}/asciidoc/asciidoc.py $RPM_BUILD_ROOT%{_bindir}/asciidoc
+ln -sf %{_datadir}/%{name}/stylesheets $RPM_BUILD_ROOT%{_sysconfdir}/stylesheets
 
 %clean
 rm -rf $RPM_BUILD_ROOT
