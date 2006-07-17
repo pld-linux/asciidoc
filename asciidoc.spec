@@ -8,7 +8,6 @@ Group:		Applications/System
 Source0:	http://www.methods.co.nz/asciidoc/%{name}-%{version}.tar.gz
 # Source0-md5:	fdce1bb38f9ec8b333ced4f22f5e95a0
 URL:		http://www.methods.co.nz/asciidoc/index.html
-Requires:	libxslt-progs
 Requires:	python >= 2.3
 Requires:	python-modules >= 2.3
 Requires:	xmlto
