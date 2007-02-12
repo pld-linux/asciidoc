@@ -1,5 +1,5 @@
 Summary:	A tool for converting text files to various formats
-Summary(pl.UTF-8):   Narzędzie do konwersji plików tekstowych do różnych formatów
+Summary(pl.UTF-8):	Narzędzie do konwersji plików tekstowych do różnych formatów
 Name:		asciidoc
 Version:	7.1.2
 Release:	1
