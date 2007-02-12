@@ -1,5 +1,5 @@
 Summary:	A tool for converting text files to various formats
-Summary(pl):	Narzêdzie do konwersji plików tekstowych do ró¿nych formatów
+Summary(pl.UTF-8):   NarzÄ™dzie do konwersji plikÃ³w tekstowych do rÃ³Å¼nych formatÃ³w
 Name:		asciidoc
 Version:	7.1.2
 Release:	1
@@ -25,14 +25,14 @@ the AsciiDoc source file syntax and the backend output markups (which
 can be almost any type of SGML/XML markup) can be customized and
 extended by the user.
 
-%description -l pl
-AsciiDoc jest formatem dokumentów tekstowych do pisania krótkich
-dokumentów, artyku³ów, ksi±¿ek i podrêczników systemu UNIX. Pliki
-AsciiDoc mog± byæ t³umaczone do HTML-a (z lub bez CSS), DocBooka i
-LinuxDoca u¿ywaj±c polecenia asciidoc(1). AsciiDoc jest wysoce
-konfigurowalny: zarówno sk³adnia plików ¼ród³owych, jak i znaczniki
-backendów (które mog± byæ dowolnego typu SGML/XML) mog± byæ
-dostosowywane i rozszerzane przez u¿ytkownika.
+%description -l pl.UTF-8
+AsciiDoc jest formatem dokumentÃ³w tekstowych do pisania krÃ³tkich
+dokumentÃ³w, artykuÅ‚Ã³w, ksiÄ…Å¼ek i podrÄ™cznikÃ³w systemu UNIX. Pliki
+AsciiDoc mogÄ… byÄ‡ tÅ‚umaczone do HTML-a (z lub bez CSS), DocBooka i
+LinuxDoca uÅ¼ywajÄ…c polecenia asciidoc(1). AsciiDoc jest wysoce
+konfigurowalny: zarÃ³wno skÅ‚adnia plikÃ³w ÅºrÃ³dÅ‚owych, jak i znaczniki
+backendÃ³w (ktÃ³re mogÄ… byÄ‡ dowolnego typu SGML/XML) mogÄ… byÄ‡
+dostosowywane i rozszerzane przez uÅ¼ytkownika.
 
 %prep
 %setup -q
