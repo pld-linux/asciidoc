@@ -39,7 +39,7 @@ dostosowywane i rozszerzane przez użytkownika.
 %setup -q
 
 %build
-sed -i -e 's|^#!/usr/bin/env python|#!/usr/bin/python|' asciidoc.py
+sed -i -e '1s|^#!/usr/bin/env python|#!/usr/bin/python|' asciidoc.py
 
 %install
 rm -rf $RPM_BUILD_ROOT
