@@ -1,12 +1,13 @@
+# TODO: package the vim syntax file.
 Summary:	A tool for converting text files to various formats
 Summary(pl.UTF-8):	Narzędzie do konwersji plików tekstowych do różnych formatów
 Name:		asciidoc
-Version:	7.1.2
-Release:	3
+Version:	8.2.5
+Release:	1
 License:	GPL v2
 Group:		Applications/System
-Source0:	http://www.methods.co.nz/asciidoc/%{name}-%{version}.tar.gz
-# Source0-md5:	554af81fb0e578a77ede4359ef79db69
+Source0:	http://dl.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
+# Source0-md5:	6810883dc0705aa6f9a4d621cf3e569c
 URL:		http://www.methods.co.nz/asciidoc/index.html
 BuildRequires:	sed >= 4.0
 Requires:	python >= 2.3
@@ -15,7 +16,7 @@ Requires:	xmlto
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_sysconfdir	/etc/asciidoc
+%define		sysconfdir	/etc/asciidoc
 
 %description
 AsciiDoc is a text document format for writing short documents,
@@ -43,20 +44,31 @@ sed -i -e '1s|^#!/usr/bin/env python|#!/usr/bin/python|' asciidoc.py
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_bindir},%{_mandir}/man1,%{_sysconfdir}}
-install -d $RPM_BUILD_ROOT%{_datadir}/asciidoc/{docbook-xsl,javascripts,filters,stylesheets}
-install -d $RPM_BUILD_ROOT%{_datadir}/asciidoc/images/icons/callouts
+install -d $RPM_BUILD_ROOT{%{_bindir},%{_mandir}/man1,%{sysconfdir}}
+install -d $RPM_BUILD_ROOT%{sysconfdir}/{docbook-xsl,javascripts,filters,stylesheets}
+install -d $RPM_BUILD_ROOT%{sysconfdir}/images/icons/callouts
 
-install *.conf $RPM_BUILD_ROOT%{_sysconfdir}
-install asciidoc.py $RPM_BUILD_ROOT%{_datadir}/%{name}
-for i in docbook-xsl filters images javascripts stylesheets
-do
-	find $i -type f -exec install {} $RPM_BUILD_ROOT%{_datadir}/%{name}/{} \;;
-done
-install doc/asciidoc.1 $RPM_BUILD_ROOT%{_mandir}/man1
-ln -sf %{_datadir}/asciidoc/asciidoc.py $RPM_BUILD_ROOT%{_bindir}/asciidoc
-ln -sf %{_datadir}/%{name}/stylesheets $RPM_BUILD_ROOT%{_sysconfdir}/stylesheets
+install asciidoc.py $RPM_BUILD_ROOT%{_bindir}/asciidoc
+install a2x $RPM_BUILD_ROOT%{_bindir}/a2x
+install doc/*.1 $RPM_BUILD_ROOT%{_mandir}/man1
 
+install *.conf $RPM_BUILD_ROOT%{sysconfdir}
+install filters/*.py $RPM_BUILD_ROOT%{sysconfdir}/filters
+install filters/*.conf $RPM_BUILD_ROOT%{sysconfdir}/filters
+install docbook-xsl/*.xsl $RPM_BUILD_ROOT%{sysconfdir}/docbook-xsl
+install stylesheets/*.css $RPM_BUILD_ROOT%{sysconfdir}/stylesheets
+install javascripts/*.js $RPM_BUILD_ROOT%{sysconfdir}/javascripts
+install images/icons/callouts/* $RPM_BUILD_ROOT%{sysconfdir}/images/icons/callouts
+install images/icons/README images/icons/*.png $RPM_BUILD_ROOT%{sysconfdir}/images/icons
+
+#    if [ -d $VIM_RPM_BUILD_ROOT%{sysconfdir} ]; then
+#        install -d $VIM_RPM_BUILD_ROOT%{sysconfdir}/syntax
+#        install -m 644 vim/syntax/asciidoc.vim \
+#                       $VIM_RPM_BUILD_ROOT%{sysconfdir}/syntax/asciidoc.vim
+#        install -d $VIM_RPM_BUILD_ROOT%{sysconfdir}/ftdetect
+#        install -m 644 vim/ftdetect/asciidoc_filetype.vim \
+#                       $VIM_RPM_BUILD_ROOT%{sysconfdir}/ftdetect/asciidoc_filetype.vim
+#    fi
 rm -rf examples/website
 
 %clean
@@ -65,14 +77,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc BUGS CHANGELOG README doc/asciidoc.html examples
-%attr(755,root,root) %{_bindir}/%{name}
-%dir %{_sysconfdir}
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/*
-%dir %{_datadir}/%{name}
-%attr(755,root,root) %{_datadir}/%{name}/asciidoc.py
-%{_datadir}/%{name}/docbook-xsl
-%{_datadir}/%{name}/filters
-%{_datadir}/%{name}/images
-%{_datadir}/%{name}/javascripts
-%{_datadir}/%{name}/stylesheets
+%attr(755,root,root) %{_bindir}/*
+%dir %{sysconfdir}
+%config(noreplace) %verify(not md5 mtime size) %{sysconfdir}/*.conf
 %{_mandir}/man1/*
