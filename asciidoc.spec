@@ -4,9 +4,9 @@ Summary(pl.UTF-8):	Narzędzie do konwersji plików tekstowych do różnych forma
 Name:		asciidoc
 Version:	8.2.5
 Release:	1
-License:	GPL v2
+License:	GPL v2+
 Group:		Applications/System
-Source0:	http://dl.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
+Source0:	http://dl.sourceforge.net/asciidoc/%{name}-%{version}.tar.gz
 # Source0-md5:	6810883dc0705aa6f9a4d621cf3e569c
 URL:		http://www.methods.co.nz/asciidoc/index.html
 BuildRequires:	sed >= 4.0
@@ -45,21 +45,23 @@ sed -i -e '1s|^#!/usr/bin/env python|#!/usr/bin/python|' asciidoc.py
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_bindir},%{_mandir}/man1,%{sysconfdir}}
-install -d $RPM_BUILD_ROOT%{sysconfdir}/{docbook-xsl,javascripts,filters,stylesheets}
-install -d $RPM_BUILD_ROOT%{sysconfdir}/images/icons/callouts
+install -d $RPM_BUILD_ROOT%{sysconfdir}/{docbook-xsl,filters,stylesheets}
+install -d $RPM_BUILD_ROOT%{_datadir}/%{name}/{images/icons/callouts,javascripts}
 
 install asciidoc.py $RPM_BUILD_ROOT%{_bindir}/asciidoc
 install a2x $RPM_BUILD_ROOT%{_bindir}/a2x
 install doc/*.1 $RPM_BUILD_ROOT%{_mandir}/man1
 
 install *.conf $RPM_BUILD_ROOT%{sysconfdir}
+install docbook-xsl/*.xsl $RPM_BUILD_ROOT%{sysconfdir}/docbook-xsl
 install filters/*.py $RPM_BUILD_ROOT%{sysconfdir}/filters
 install filters/*.conf $RPM_BUILD_ROOT%{sysconfdir}/filters
-install docbook-xsl/*.xsl $RPM_BUILD_ROOT%{sysconfdir}/docbook-xsl
 install stylesheets/*.css $RPM_BUILD_ROOT%{sysconfdir}/stylesheets
-install javascripts/*.js $RPM_BUILD_ROOT%{sysconfdir}/javascripts
-install images/icons/callouts/* $RPM_BUILD_ROOT%{sysconfdir}/images/icons/callouts
-install images/icons/README images/icons/*.png $RPM_BUILD_ROOT%{sysconfdir}/images/icons
+ln -s %{_datadir}/%{name}/images $RPM_BUILD_ROOT%{sysconfdir}/images
+ln -s %{_datadir}/%{name}/javascripts $RPM_BUILD_ROOT%{sysconfdir}/javascripts
+install images/icons/callouts/* $RPM_BUILD_ROOT%{_datadir}/%{name}/images/icons/callouts
+install images/icons/README images/icons/*.png $RPM_BUILD_ROOT%{_datadir}/%{name}/images/icons
+install javascripts/*.js $RPM_BUILD_ROOT%{_datadir}/%{name}/javascripts
 
 #    if [ -d $VIM_RPM_BUILD_ROOT%{sysconfdir} ]; then
 #        install -d $VIM_RPM_BUILD_ROOT%{sysconfdir}/syntax
@@ -76,8 +78,20 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc BUGS CHANGELOG README doc/asciidoc.html examples
-%attr(755,root,root) %{_bindir}/*
+%doc BUGS CHANGELOG COPYRIGHT README doc/asciidoc.html examples
+%attr(755,root,root) %{_bindir}/a2x
+%attr(755,root,root) %{_bindir}/asciidoc
 %dir %{sysconfdir}
 %config(noreplace) %verify(not md5 mtime size) %{sysconfdir}/*.conf
-%{_mandir}/man1/*
+%dir %{sysconfdir}/docbook-xsl
+%{sysconfdir}/docbook-xsl/*.xsl
+%dir %{sysconfdir}/filters
+%config(noreplace) %verify(not md5 mtime size) %{sysconfdir}/filters/*.conf
+%attr(755,root,root) %{sysconfdir}/filters/*.py
+%{sysconfdir}/images
+%{sysconfdir}/javascripts
+%dir %{sysconfdir}/stylesheets
+%{sysconfdir}/stylesheets/*.css
+%{_datadir}/%{name}
+%{_mandir}/man1/a2x.1*
+%{_mandir}/man1/asciidoc.1*
