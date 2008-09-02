@@ -1,0 +1,11 @@
+--- asciidoc-8.2.7/asciidoc.py.orig	2008-07-03 01:15:11.000000000 +0200
++++ asciidoc-8.2.7/asciidoc.py	2008-09-02 21:39:38.172995689 +0200
+@@ -140,7 +140,7 @@
+         directory = os.path.dirname(document.infile)
+     elif directory == '':
+         directory = '.'
+-    return not safe() or file_in(fname, directory)
++    return not safe() or file_in(fname, directory) or file_in(fname, "/usr/share/asciidoc")
+ 
+ # Return file name which must reside in the parent file directory.
+ # Return None if file is not found or not safe.
