@@ -2,12 +2,12 @@
 Summary:	A tool for converting text files to various formats
 Summary(pl.UTF-8):	Narzędzie do konwersji plików tekstowych do różnych formatów
 Name:		asciidoc
-Version:	8.3.1
+Version:	8.4.5
 Release:	1
 License:	GPL v2+
 Group:		Applications/System
 Source0:	http://dl.sourceforge.net/asciidoc/%{name}-%{version}.tar.gz
-# Source0-md5:	3e8ea3eab6a6bd89f8fd49fb6d14bfb5
+# Source0-md5:	9f21d6e352b3ab668f9def3eb7497da2
 Patch0:		%{name}-safe.patch
 URL:		http://www.methods.co.nz/asciidoc/index.html
 BuildRequires:	sed >= 4.0
@@ -56,8 +56,8 @@ install doc/*.1 $RPM_BUILD_ROOT%{_mandir}/man1
 
 install *.conf $RPM_BUILD_ROOT%{sysconfdir}
 install docbook-xsl/*.xsl $RPM_BUILD_ROOT%{sysconfdir}/docbook-xsl
-install filters/*.py $RPM_BUILD_ROOT%{sysconfdir}/filters
-install filters/*.conf $RPM_BUILD_ROOT%{sysconfdir}/filters
+install filters/code/*.py $RPM_BUILD_ROOT%{sysconfdir}/filters
+install filters/code/*.conf $RPM_BUILD_ROOT%{sysconfdir}/filters
 install stylesheets/*.css $RPM_BUILD_ROOT%{sysconfdir}/stylesheets
 ln -s %{_datadir}/%{name}/images $RPM_BUILD_ROOT%{sysconfdir}/images
 ln -s %{_datadir}/%{name}/javascripts $RPM_BUILD_ROOT%{sysconfdir}/javascripts
