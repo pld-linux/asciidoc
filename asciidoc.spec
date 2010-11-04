@@ -2,13 +2,13 @@
 Summary:	A tool for converting text files to various formats
 Summary(pl.UTF-8):	Narzędzie do konwersji plików tekstowych do różnych formatów
 Name:		asciidoc
-Version:	8.4.5
+Version:	8.6.2
 Release:	1
 License:	GPL v2+
 Group:		Applications/System
-Source0:	http://dl.sourceforge.net/asciidoc/%{name}-%{version}.tar.gz
-# Source0-md5:	9f21d6e352b3ab668f9def3eb7497da2
-Patch0:		%{name}-safe.patch
+Source0:	http://downloads.sourceforge.net/asciidoc/%{name}-%{version}.tar.gz
+# Source0-md5:	6fa7ca8d05e550b193eeaf7528e37e64
+#Patch0:		%{name}-safe.patch
 URL:		http://www.methods.co.nz/asciidoc/index.html
 BuildRequires:	sed >= 4.0
 Requires:	python >= 2.3
@@ -39,25 +39,32 @@ dostosowywane i rozszerzane przez użytkownika.
 
 %prep
 %setup -q
-%patch0 -p1
+
+sed -i -e '1s|^#!/usr/bin/env python|#!/usr/bin/python|' asciidoc.py a2x.py
 
 %build
-sed -i -e '1s|^#!/usr/bin/env python|#!/usr/bin/python|' asciidoc.py
+%configure
+
+%{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_bindir},%{_mandir}/man1,%{sysconfdir}}
-install -d $RPM_BUILD_ROOT%{sysconfdir}/{docbook-xsl,filters,stylesheets}
+install -d $RPM_BUILD_ROOT{%{_bindir},%{_mandir}/man1}
+install -d $RPM_BUILD_ROOT%{sysconfdir}/{dblatex,docbook-xsl,filters/{code,graphviz,latex,music,source},stylesheets}
 install -d $RPM_BUILD_ROOT%{_datadir}/%{name}/{images/icons/callouts,javascripts}
 
 install asciidoc.py $RPM_BUILD_ROOT%{_bindir}/asciidoc
-install a2x $RPM_BUILD_ROOT%{_bindir}/a2x
+install a2x.py $RPM_BUILD_ROOT%{_bindir}/a2x
 install doc/*.1 $RPM_BUILD_ROOT%{_mandir}/man1
 
 install *.conf $RPM_BUILD_ROOT%{sysconfdir}
+install dblatex/*.{xsl,sty} $RPM_BUILD_ROOT%{sysconfdir}/dblatex
 install docbook-xsl/*.xsl $RPM_BUILD_ROOT%{sysconfdir}/docbook-xsl
-install filters/code/*.py $RPM_BUILD_ROOT%{sysconfdir}/filters
-install filters/code/*.conf $RPM_BUILD_ROOT%{sysconfdir}/filters
+install filters/code/*.{py,conf} $RPM_BUILD_ROOT%{sysconfdir}/filters/code
+install filters/graphviz/*.{py,conf} $RPM_BUILD_ROOT%{sysconfdir}/filters/graphviz
+install filters/latex/*.{py,conf} $RPM_BUILD_ROOT%{sysconfdir}/filters/latex
+install filters/music/*.{py,conf} $RPM_BUILD_ROOT%{sysconfdir}/filters/music
+install filters/source/*.conf $RPM_BUILD_ROOT%{sysconfdir}/filters/source
 install stylesheets/*.css $RPM_BUILD_ROOT%{sysconfdir}/stylesheets
 ln -s %{_datadir}/%{name}/images $RPM_BUILD_ROOT%{sysconfdir}/images
 ln -s %{_datadir}/%{name}/javascripts $RPM_BUILD_ROOT%{sysconfdir}/javascripts
@@ -73,23 +80,38 @@ install javascripts/*.js $RPM_BUILD_ROOT%{_datadir}/%{name}/javascripts
 #        install -m 644 vim/ftdetect/asciidoc_filetype.vim \
 #                       $VIM_RPM_BUILD_ROOT%{sysconfdir}/ftdetect/asciidoc_filetype.vim
 #    fi
-rm -rf examples/website
+%{__rm} -r examples/website
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc BUGS CHANGELOG COPYRIGHT README doc/asciidoc.html examples
+%doc BUGS CHANGELOG COPYRIGHT README doc/asciidoc.txt examples
 %attr(755,root,root) %{_bindir}/a2x
 %attr(755,root,root) %{_bindir}/asciidoc
 %dir %{sysconfdir}
 %config(noreplace) %verify(not md5 mtime size) %{sysconfdir}/*.conf
+%dir %{sysconfdir}/dblatex
+%{sysconfdir}/dblatex/*.sty
+%{sysconfdir}/dblatex/*.xsl
 %dir %{sysconfdir}/docbook-xsl
 %{sysconfdir}/docbook-xsl/*.xsl
 %dir %{sysconfdir}/filters
-%config(noreplace) %verify(not md5 mtime size) %{sysconfdir}/filters/*.conf
-%attr(755,root,root) %{sysconfdir}/filters/*.py
+%dir %{sysconfdir}/filters/code
+%config(noreplace) %verify(not md5 mtime size) %{sysconfdir}/filters/code/code-filter.conf
+%attr(755,root,root) %{sysconfdir}/filters/code/code-filter.py
+%dir %{sysconfdir}/filters/graphviz
+%config(noreplace) %verify(not md5 mtime size) %{sysconfdir}/filters/graphviz/graphviz-filter.conf
+%attr(755,root,root) %{sysconfdir}/filters/graphviz/graphviz2png.py
+%dir %{sysconfdir}/filters/music
+%config(noreplace) %verify(not md5 mtime size) %{sysconfdir}/filters/music/music-filter.conf
+%attr(755,root,root) %{sysconfdir}/filters/music/music2png.py
+%dir %{sysconfdir}/filters/source
+%config(noreplace) %verify(not md5 mtime size) %{sysconfdir}/filters/source/source-highlight-filter.conf
+%dir %{sysconfdir}/filters/latex
+%config(noreplace) %verify(not md5 mtime size) %{sysconfdir}/filters/latex/latex-filter.conf
+%attr(755,root,root) %{sysconfdir}/filters/latex/latex2png.py
 %{sysconfdir}/images
 %{sysconfdir}/javascripts
 %dir %{sysconfdir}/stylesheets
