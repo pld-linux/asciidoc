@@ -9,6 +9,7 @@ Group:		Applications/System
 Source0:	http://downloads.sourceforge.net/asciidoc/%{name}-%{version}.tar.gz
 # Source0-md5:	1ef39786ee1b4c8a788584e73db2c55a
 URL:		http://www.methods.co.nz/asciidoc/index.html
+BuildRequires:	rpm-pythonprov
 BuildRequires:	sed >= 4.0
 Requires:	python >= 2.3
 Requires:	python-modules >= 2.3
