@@ -2,12 +2,12 @@
 Summary:	A tool for converting text files to various formats
 Summary(pl.UTF-8):	Narzędzie do konwersji plików tekstowych do różnych formatów
 Name:		asciidoc
-Version:	8.6.3
+Version:	8.6.4
 Release:	1
 License:	GPL v2+
 Group:		Applications/System
 Source0:	http://downloads.sourceforge.net/asciidoc/%{name}-%{version}.tar.gz
-# Source0-md5:	1ef39786ee1b4c8a788584e73db2c55a
+# Source0-md5:	180512ef2b07b52ef351088f54e5803e
 URL:		http://www.methods.co.nz/asciidoc/index.html
 BuildRequires:	rpm-pythonprov
 BuildRequires:	sed >= 4.0
