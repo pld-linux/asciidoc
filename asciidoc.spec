@@ -40,7 +40,11 @@ dostosowywane i rozszerzane przez użytkownika.
 %prep
 %setup -q
 
-sed -i -e '1s|^#!/usr/bin/env python|#!/usr/bin/python|' asciidoc.py a2x.py
+sed -i -e '1s|^#!/usr/bin/env python|#!%{__python}|' asciidoc.py a2x.py \
+	filters/code/code-filter.py \
+	filters/latex/latex2png.py \
+	filters/music/music2png.py \
+	filters/graphviz/graphviz2png.py
 
 %build
 %configure
