@@ -2,12 +2,12 @@
 Summary:	A tool for converting text files to various formats
 Summary(pl.UTF-8):	Narzędzie do konwersji plików tekstowych do różnych formatów
 Name:		asciidoc
-Version:	8.6.8
+Version:	8.6.9
 Release:	1
 License:	GPL v2+
 Group:		Applications/System
 Source0:	http://downloads.sourceforge.net/asciidoc/%{name}-%{version}.tar.gz
-# Source0-md5:	6ffff1ab211f30481741ce4d1e4b12bf
+# Source0-md5:	c59018f105be8d022714b826b0be130a
 URL:		http://www.methods.co.nz/asciidoc/index.html
 BuildRequires:	rpm-pythonprov
 BuildRequires:	sed >= 4.0
@@ -53,24 +53,24 @@ install -d $RPM_BUILD_ROOT{%{_bindir},%{_mandir}/man1}
 install -d $RPM_BUILD_ROOT%{sysconfdir}/{dblatex,docbook-xsl,filters/{code,graphviz,latex,music,source},stylesheets}
 install -d $RPM_BUILD_ROOT%{_datadir}/%{name}/{images/icons/callouts,javascripts}
 
-install asciidoc.py $RPM_BUILD_ROOT%{_bindir}/asciidoc
-install a2x.py $RPM_BUILD_ROOT%{_bindir}/a2x
-install doc/*.1 $RPM_BUILD_ROOT%{_mandir}/man1
+cp -p asciidoc.py $RPM_BUILD_ROOT%{_bindir}/asciidoc
+cp -p a2x.py $RPM_BUILD_ROOT%{_bindir}/a2x
+cp -p doc/*.1 $RPM_BUILD_ROOT%{_mandir}/man1
 
-install *.conf $RPM_BUILD_ROOT%{sysconfdir}
-install dblatex/*.{xsl,sty} $RPM_BUILD_ROOT%{sysconfdir}/dblatex
-install docbook-xsl/*.xsl $RPM_BUILD_ROOT%{sysconfdir}/docbook-xsl
-install filters/code/*.{py,conf} $RPM_BUILD_ROOT%{sysconfdir}/filters/code
-install filters/graphviz/*.{py,conf} $RPM_BUILD_ROOT%{sysconfdir}/filters/graphviz
-install filters/latex/*.{py,conf} $RPM_BUILD_ROOT%{sysconfdir}/filters/latex
-install filters/music/*.{py,conf} $RPM_BUILD_ROOT%{sysconfdir}/filters/music
-install filters/source/*.conf $RPM_BUILD_ROOT%{sysconfdir}/filters/source
-install stylesheets/*.css $RPM_BUILD_ROOT%{sysconfdir}/stylesheets
+cp -p *.conf $RPM_BUILD_ROOT%{sysconfdir}
+cp -p dblatex/*.{xsl,sty} $RPM_BUILD_ROOT%{sysconfdir}/dblatex
+cp -p docbook-xsl/*.xsl $RPM_BUILD_ROOT%{sysconfdir}/docbook-xsl
+cp -p filters/code/*.{py,conf} $RPM_BUILD_ROOT%{sysconfdir}/filters/code
+cp -p filters/graphviz/*.{py,conf} $RPM_BUILD_ROOT%{sysconfdir}/filters/graphviz
+cp -p filters/latex/*.{py,conf} $RPM_BUILD_ROOT%{sysconfdir}/filters/latex
+cp -p filters/music/*.{py,conf} $RPM_BUILD_ROOT%{sysconfdir}/filters/music
+cp -p filters/source/*.conf $RPM_BUILD_ROOT%{sysconfdir}/filters/source
+cp -p stylesheets/*.css $RPM_BUILD_ROOT%{sysconfdir}/stylesheets
 ln -s %{_datadir}/%{name}/images $RPM_BUILD_ROOT%{sysconfdir}/images
 ln -s %{_datadir}/%{name}/javascripts $RPM_BUILD_ROOT%{sysconfdir}/javascripts
-install images/icons/callouts/* $RPM_BUILD_ROOT%{_datadir}/%{name}/images/icons/callouts
-install images/icons/README images/icons/*.png $RPM_BUILD_ROOT%{_datadir}/%{name}/images/icons
-install javascripts/*.js $RPM_BUILD_ROOT%{_datadir}/%{name}/javascripts
+cp -p images/icons/callouts/* $RPM_BUILD_ROOT%{_datadir}/%{name}/images/icons/callouts
+cp -p images/icons/README images/icons/*.png $RPM_BUILD_ROOT%{_datadir}/%{name}/images/icons
+cp -p javascripts/*.js $RPM_BUILD_ROOT%{_datadir}/%{name}/javascripts
 
 #    if [ -d $VIM_RPM_BUILD_ROOT%{sysconfdir} ]; then
 #        install -d $VIM_RPM_BUILD_ROOT%{sysconfdir}/syntax
