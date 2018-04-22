@@ -2,13 +2,15 @@
 Summary:	A tool for converting text files to various formats
 Summary(pl.UTF-8):	Narzędzie do konwersji plików tekstowych do różnych formatów
 Name:		asciidoc
-Version:	8.6.9
+Version:	8.6.10
 Release:	1
 License:	GPL v2+
 Group:		Applications/System
-Source0:	http://downloads.sourceforge.net/asciidoc/%{name}-%{version}.tar.gz
-# Source0-md5:	c59018f105be8d022714b826b0be130a
-URL:		http://www.methods.co.nz/asciidoc/index.html
+#Source0Download: https://github.com/asciidoc/asciidoc/releases
+Source0:	https://github.com/asciidoc/asciidoc/archive/%{version}/%{name}-%{version}.tar.gz
+# Source0-md5:	4e69960f4d431780e9828f53417d8d7a
+URL:		http://asciidoc.org/
+BuildRequires:	autoconf >= 2.50
 BuildRequires:	rpm-pythonprov
 BuildRequires:	sed >= 4.0
 Requires:	python >= 2.3
@@ -17,7 +19,7 @@ Requires:	xmlto
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		sysconfdir	/etc/asciidoc
+%define		pkgconfdir	%{_sysconfdir}/asciidoc
 
 %description
 AsciiDoc is a text document format for writing short documents,
@@ -40,41 +42,32 @@ dostosowywane i rozszerzane przez użytkownika.
 %prep
 %setup -q
 
-sed -i -e '1s|^#!/usr/bin/env python|#!%{__python}|' asciidoc.py a2x.py \
+%{__sed} -i -e '1s|^#!/usr/bin/env python2\?|#!%{__python}|' asciidoc.py a2x.py \
 	filters/code/code-filter.py \
-	filters/latex/latex2png.py \
+	filters/latex/latex2img.py \
 	filters/music/music2png.py \
 	filters/graphviz/graphviz2png.py
 
 %build
+%{__autoconf}
 %configure
 
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_bindir},%{_mandir}/man1}
-install -d $RPM_BUILD_ROOT%{sysconfdir}/{dblatex,docbook-xsl,filters/{code,graphviz,latex,music,source},stylesheets}
-install -d $RPM_BUILD_ROOT%{_datadir}/%{name}/{images/icons/callouts,javascripts}
 
-cp -p asciidoc.py $RPM_BUILD_ROOT%{_bindir}/asciidoc
-cp -p a2x.py $RPM_BUILD_ROOT%{_bindir}/a2x
-cp -p doc/*.1 $RPM_BUILD_ROOT%{_mandir}/man1
+%{__make} install \
+	DESTDIR=$RPM_BUILD_ROOT
 
-cp -p *.conf $RPM_BUILD_ROOT%{sysconfdir}
-cp -p dblatex/*.{xsl,sty} $RPM_BUILD_ROOT%{sysconfdir}/dblatex
-cp -p docbook-xsl/*.xsl $RPM_BUILD_ROOT%{sysconfdir}/docbook-xsl
-cp -p filters/code/*.{py,conf} $RPM_BUILD_ROOT%{sysconfdir}/filters/code
-cp -p filters/graphviz/*.{py,conf} $RPM_BUILD_ROOT%{sysconfdir}/filters/graphviz
-cp -p filters/latex/*.{py,conf} $RPM_BUILD_ROOT%{sysconfdir}/filters/latex
-cp -p filters/music/*.{py,conf} $RPM_BUILD_ROOT%{sysconfdir}/filters/music
-cp -p filters/source/*.conf $RPM_BUILD_ROOT%{sysconfdir}/filters/source
-cp -p stylesheets/*.css $RPM_BUILD_ROOT%{sysconfdir}/stylesheets
-ln -s %{_datadir}/%{name}/images $RPM_BUILD_ROOT%{sysconfdir}/images
-ln -s %{_datadir}/%{name}/javascripts $RPM_BUILD_ROOT%{sysconfdir}/javascripts
-cp -p images/icons/callouts/* $RPM_BUILD_ROOT%{_datadir}/%{name}/images/icons/callouts
-cp -p images/icons/README images/icons/*.png $RPM_BUILD_ROOT%{_datadir}/%{name}/images/icons
-cp -p javascripts/*.js $RPM_BUILD_ROOT%{_datadir}/%{name}/javascripts
+# install directly instead of symlinks to .py
+%{__mv} $RPM_BUILD_ROOT%{_bindir}/a2x{.py,}
+%{__mv} $RPM_BUILD_ROOT%{_bindir}/asciidoc{.py,}
+# move constant data to /usr
+install -d $RPM_BUILD_ROOT%{_datadir}/%{name}
+%{__mv} $RPM_BUILD_ROOT%{pkgconfdir}/{images,javascripts} $RPM_BUILD_ROOT%{_datadir}/%{name}
+ln -sf %{_datadir}/%{name}/images $RPM_BUILD_ROOT%{pkgconfdir}/images
+ln -sf %{_datadir}/%{name}/javascripts $RPM_BUILD_ROOT%{pkgconfdir}/javascripts
 
 #    if [ -d $VIM_RPM_BUILD_ROOT%{sysconfdir} ]; then
 #        install -d $VIM_RPM_BUILD_ROOT%{sysconfdir}/syntax
@@ -91,35 +84,36 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc BUGS CHANGELOG COPYRIGHT README doc/asciidoc.txt examples
+%doc BUGS.txt CHANGELOG.txt COPYRIGHT README.asciidoc doc/asciidoc.txt examples
 %attr(755,root,root) %{_bindir}/a2x
 %attr(755,root,root) %{_bindir}/asciidoc
-%dir %{sysconfdir}
-%config(noreplace) %verify(not md5 mtime size) %{sysconfdir}/*.conf
-%dir %{sysconfdir}/dblatex
-%{sysconfdir}/dblatex/*.sty
-%{sysconfdir}/dblatex/*.xsl
-%dir %{sysconfdir}/docbook-xsl
-%{sysconfdir}/docbook-xsl/*.xsl
-%dir %{sysconfdir}/filters
-%dir %{sysconfdir}/filters/code
-%config(noreplace) %verify(not md5 mtime size) %{sysconfdir}/filters/code/code-filter.conf
-%attr(755,root,root) %{sysconfdir}/filters/code/code-filter.py
-%dir %{sysconfdir}/filters/graphviz
-%config(noreplace) %verify(not md5 mtime size) %{sysconfdir}/filters/graphviz/graphviz-filter.conf
-%attr(755,root,root) %{sysconfdir}/filters/graphviz/graphviz2png.py
-%dir %{sysconfdir}/filters/music
-%config(noreplace) %verify(not md5 mtime size) %{sysconfdir}/filters/music/music-filter.conf
-%attr(755,root,root) %{sysconfdir}/filters/music/music2png.py
-%dir %{sysconfdir}/filters/source
-%config(noreplace) %verify(not md5 mtime size) %{sysconfdir}/filters/source/source-highlight-filter.conf
-%dir %{sysconfdir}/filters/latex
-%config(noreplace) %verify(not md5 mtime size) %{sysconfdir}/filters/latex/latex-filter.conf
-%attr(755,root,root) %{sysconfdir}/filters/latex/latex2png.py
-%{sysconfdir}/images
-%{sysconfdir}/javascripts
-%dir %{sysconfdir}/stylesheets
-%{sysconfdir}/stylesheets/*.css
+%dir %{pkgconfdir}
+%config(noreplace) %verify(not md5 mtime size) %{pkgconfdir}/*.conf
+%dir %{pkgconfdir}/dblatex
+%{pkgconfdir}/dblatex/*.sty
+%{pkgconfdir}/dblatex/*.xsl
+%dir %{pkgconfdir}/docbook-xsl
+%{pkgconfdir}/docbook-xsl/*.xsl
+%dir %{pkgconfdir}/filters
+%dir %{pkgconfdir}/filters/code
+%config(noreplace) %verify(not md5 mtime size) %{pkgconfdir}/filters/code/code-filter.conf
+%attr(755,root,root) %{pkgconfdir}/filters/code/code-filter.py
+%dir %{pkgconfdir}/filters/graphviz
+%config(noreplace) %verify(not md5 mtime size) %{pkgconfdir}/filters/graphviz/graphviz-filter.conf
+%attr(755,root,root) %{pkgconfdir}/filters/graphviz/graphviz2png.py
+%dir %{pkgconfdir}/filters/music
+%config(noreplace) %verify(not md5 mtime size) %{pkgconfdir}/filters/music/music-filter.conf
+%attr(755,root,root) %{pkgconfdir}/filters/music/music2png.py
+%dir %{pkgconfdir}/filters/source
+%config(noreplace) %verify(not md5 mtime size) %{pkgconfdir}/filters/source/source-highlight-filter.conf
+%dir %{pkgconfdir}/filters/latex
+%config(noreplace) %verify(not md5 mtime size) %{pkgconfdir}/filters/latex/latex-filter.conf
+%attr(755,root,root) %{pkgconfdir}/filters/latex/latex2img.py
+%{pkgconfdir}/images
+%{pkgconfdir}/javascripts
+%dir %{pkgconfdir}/stylesheets
+%{pkgconfdir}/stylesheets/*.css
+%{pkgconfdir}/themes
 %{_datadir}/%{name}
 %{_mandir}/man1/a2x.1*
 %{_mandir}/man1/asciidoc.1*
