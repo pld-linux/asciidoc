@@ -2,19 +2,19 @@
 Summary:	A tool for converting text files to various formats
 Summary(pl.UTF-8):	Narzędzie do konwersji plików tekstowych do różnych formatów
 Name:		asciidoc
-Version:	8.6.10
+Version:	9.1.0
 Release:	1
 License:	GPL v2+
 Group:		Applications/System
 #Source0Download: https://github.com/asciidoc/asciidoc/releases
-Source0:	https://github.com/asciidoc/asciidoc/archive/%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	4e69960f4d431780e9828f53417d8d7a
-URL:		http://asciidoc.org/
+Source0:	https://github.com/asciidoc-py/asciidoc-py/archive/%{version}/%{name}-%{version}.tar.gz
+# Source0-md5:	52fc3849e1f48d8764337ce2b355b2ff
+URL:		https://asciidoc.org/
 BuildRequires:	autoconf >= 2.50
 BuildRequires:	rpm-pythonprov
 BuildRequires:	sed >= 4.0
-Requires:	python >= 2.3
-Requires:	python-modules >= 2.3
+Requires:	python3 >= 1:3.5
+Requires:	python3-modules >= 1:3.5
 Requires:	xmlto
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -40,13 +40,14 @@ backendów (które mogą być dowolnego typu SGML/XML) mogą być
 dostosowywane i rozszerzane przez użytkownika.
 
 %prep
-%setup -q
+%setup -q -n %{name}-py-%{version}
 
-%{__sed} -i -e '1s|^#!/usr/bin/env python2\?|#!%{__python}|' asciidoc.py a2x.py \
+%{__sed} -i -e '1s|^#!/usr/bin/env python3\?|#!%{__python3}|' asciidoc.py a2x.py \
 	filters/code/code-filter.py \
 	filters/latex/latex2img.py \
 	filters/music/music2png.py \
-	filters/graphviz/graphviz2png.py
+	filters/graphviz/graphviz2png.py \
+	filters/unwraplatex.py
 
 %build
 %{__autoconf}
@@ -69,6 +70,8 @@ install -d $RPM_BUILD_ROOT%{_datadir}/%{name}
 ln -sf %{_datadir}/%{name}/images $RPM_BUILD_ROOT%{pkgconfdir}/images
 ln -sf %{_datadir}/%{name}/javascripts $RPM_BUILD_ROOT%{pkgconfdir}/javascripts
 
+%{__rm} $RPM_BUILD_ROOT%{_mandir}/man1/testasciidoc.1
+
 #    if [ -d $VIM_RPM_BUILD_ROOT%{sysconfdir} ]; then
 #        install -d $VIM_RPM_BUILD_ROOT%{sysconfdir}/syntax
 #        install -m 644 vim/syntax/asciidoc.vim \
@@ -77,14 +80,13 @@ ln -sf %{_datadir}/%{name}/javascripts $RPM_BUILD_ROOT%{pkgconfdir}/javascripts
 #        install -m 644 vim/ftdetect/asciidoc_filetype.vim \
 #                       $VIM_RPM_BUILD_ROOT%{sysconfdir}/ftdetect/asciidoc_filetype.vim
 #    fi
-%{__rm} -r examples/website
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc BUGS.txt CHANGELOG.txt COPYRIGHT README.asciidoc doc/asciidoc.txt examples
+%doc BUGS.txt CHANGELOG.txt COPYRIGHT README.asciidoc doc/asciidoc.txt
 %attr(755,root,root) %{_bindir}/a2x
 %attr(755,root,root) %{_bindir}/asciidoc
 %dir %{pkgconfdir}
@@ -109,6 +111,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{pkgconfdir}/filters/latex
 %config(noreplace) %verify(not md5 mtime size) %{pkgconfdir}/filters/latex/latex-filter.conf
 %attr(755,root,root) %{pkgconfdir}/filters/latex/latex2img.py
+%attr(755,root,root) %{pkgconfdir}/filters/unwraplatex.py
 %{pkgconfdir}/images
 %{pkgconfdir}/javascripts
 %dir %{pkgconfdir}/stylesheets
