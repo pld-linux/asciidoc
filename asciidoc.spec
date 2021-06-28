@@ -13,6 +13,7 @@ URL:		https://asciidoc.org/
 BuildRequires:	autoconf >= 2.50
 BuildRequires:	rpm-pythonprov
 BuildRequires:	sed >= 4.0
+Requires:	/usr/bin/pygmentize
 Requires:	docbook-dtd45-xml
 Requires:	python3 >= 1:3.5
 Requires:	python3-modules >= 1:3.5
