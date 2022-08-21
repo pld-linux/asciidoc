@@ -12,6 +12,7 @@ Source0:	https://github.com/asciidoc-py/asciidoc-py/archive/%{version}/%{name}-%
 URL:		https://asciidoc.org/
 BuildRequires:	autoconf >= 2.50
 BuildRequires:	rpm-pythonprov
+BuildRequires:	rpmbuild(macros) >= 1.714
 BuildRequires:	sed >= 4.0
 Requires:	/usr/bin/pygmentize
 Requires:	docbook-dtd45-xml
