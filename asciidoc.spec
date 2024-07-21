@@ -2,13 +2,13 @@
 Summary:	A tool for converting text files to various formats
 Summary(pl.UTF-8):	Narzędzie do konwersji plików tekstowych do różnych formatów
 Name:		asciidoc
-Version:	10.2.0
+Version:	10.2.1
 Release:	1
 License:	GPL v2+
 Group:		Applications/System
 #Source0Download: https://github.com/asciidoc-py/asciidoc-py/releases
 Source0:	https://github.com/asciidoc-py/asciidoc-py/archive/%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	dce6bfe35fd2fe4fc71e1ca8c8ead683
+# Source0-md5:	186b56a1020e671b24de413bc3795122
 URL:		https://asciidoc.org/
 BuildRequires:	autoconf >= 2.50
 BuildRequires:	rpm-pythonprov
